@@ -25,7 +25,7 @@ impl TryFrom<u16> for R {
     }
 }
 
-#[derive(FromPrimitive)]
+#[derive(FromPrimitive, PartialEq)]
 #[repr(u16)]
 pub enum Flag {
     Positive = 1 << 0,
@@ -90,6 +90,12 @@ impl Register {
 
     pub fn read(&self, r: R) -> u16 {
         self.0[r as usize]
+    }
+
+    pub fn read_incr(&mut self, r: R) -> u16 {
+        let val = self.read(r);
+        self.incr(r);
+        val
     }
 
     pub fn update_flag(&mut self, r: R) {
