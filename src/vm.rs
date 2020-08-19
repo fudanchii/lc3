@@ -20,7 +20,7 @@ pub enum OpCode {
     LDI,
     STI,
     JMP,
-    RES,
+    RET,
     LEA,
     TRAP,
 }
@@ -82,7 +82,7 @@ impl VM {
             OpCode::LDI => self.mnemonic_ldi(instr)?,
             OpCode::STI => self.mnemonic_sti(instr)?,
             OpCode::JMP => self.mnemonic_jmp(instr)?,
-            OpCode::RES => self.mnemonic_res(instr)?,
+            OpCode::RET => self.mnemonic_ret(instr)?,
             OpCode::LEA => self.mnemonic_lea(instr)?,
             OpCode::TRAP => self.mnemonic_trap(instr)?,
             _ => return Err(format!("opcode `{:?}` not implemented", opcode)),
@@ -187,6 +187,11 @@ impl VM {
         let r0: R = reg_1st(args)?;
         let offset: u16 = sign_extend(args & 0x1ff, 9);
         self.write_memory(self.register.read(R::PC) + offset, self.register.read(r0));
+        Ok(())
+    }
+
+    fn mnemonic_ret(&mut self, _: u16) -> Result<(), String> {
+        self.register.write(R::PC, self.register.read(R::_7));
         Ok(())
     }
 }
