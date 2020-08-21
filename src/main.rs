@@ -6,7 +6,7 @@ fn main() {
     let mut vm = VM::boot(Args {
         offset: PC_START,
         image: None,
-    });
+    }).unwrap();
 
     while vm.is_running() {
         if let Err(code) = vm.next() {
