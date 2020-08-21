@@ -62,7 +62,7 @@ impl TryFrom<u16> for PL {
     }
 }
 
-#[derive(FromPrimitive)]
+#[derive(FromPrimitive, PartialEq)]
 #[repr(u16)]
 pub enum Mode {
     Privilege = 0,
@@ -131,6 +131,6 @@ impl Register {
     }
 
     pub fn incr(&mut self, r: R) {
-        self.write(r, self.read(r) + 1);
+        self.write(r, self.read(r).wrapping_add(1));
     }
 }
